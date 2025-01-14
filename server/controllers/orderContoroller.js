@@ -204,6 +204,15 @@ let line_items=itemsForCart.map((item)=>({
     quantity: item.quantity,
 }))
 
+line_items.push({
+  price_data: {
+    currency: 'gbp',
+    product_data: { name: `Shipping Charges`  },
+    unit_amount: Math.round(process.env.SHIPPING_PRICE*100),
+  },
+  quantity: 1,
+})
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card','bacs_debit','paypal'], // Add as many as supported
     line_items: line_items,

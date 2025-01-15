@@ -43,7 +43,7 @@ const createProduct = asyncHandler(async (req, res) => {
     
 
     // Extract product details
-    const { name, description, category, basePrice, discount, brand } = req.body;
+    const { name, description, category, basePrice, discount, brand,shippingFee } = req.body;
     const user = req.user.id;
 
     // Check if SKUs exist
@@ -58,6 +58,7 @@ const createProduct = asyncHandler(async (req, res) => {
     const uploadedProduct = await Product.create({
       name,
       brand,
+      shippingFee:Number(shippingFee),
       basePprice: Number(basePrice),
       catagory:category,
       colors: colorsToSend,

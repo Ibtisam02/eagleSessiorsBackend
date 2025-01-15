@@ -103,11 +103,11 @@ const newOdrer = asyncHandler(async (req, res, next) => {
     if (!createdOrde) {
       return next(new ErrorHandler("Internal server Error Somthing went wrong", 500));
     }
-    await sendEmail({
+    /*await sendEmail({
       email: "ibtisamwarraich101@gmail.com",
       subject: "Eagle Scissors New Order Email",
       message: `Congratulations! You have recived a new Order from user ${shippingInfo.firstName} ${shippingInfo.lastName} \nEmail:   ${shippingInfo.email}\nPhone:   ${shippingInfo.phone}\nAddress:   ${shippingInfo.address}`,
-    });
+    });*/
 
     console.log(createdOrde);
     

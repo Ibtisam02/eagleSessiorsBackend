@@ -16,6 +16,11 @@ const productScheema = new mongoose.Schema({
     required: [true, "Please Enter Product Price"],
     maxLength: [8, "Price cannot exceed 8 characters"],
   },
+  shippingFee: {
+    type: Number,
+    required: [true, "Please Enter Product Price"],
+    min:[0,"cnnot be less then zero"]
+  },
   brand: {
     type: String,
   },
@@ -28,6 +33,8 @@ const productScheema = new mongoose.Schema({
   rating: {
     type: Number, 
     default: 0,
+    max:[5,"Cannot be greater then 5"],
+    min:[0,"Cannot be less then 0"]
   },
   images: [
     {
@@ -71,6 +78,7 @@ const productScheema = new mongoose.Schema({
   numberOfReviews: {
     type: Number,
     default: 0,
+    min:[0,"cannot be less then zero"]
   },
   user: {
     type: mongoose.Schema.ObjectId,

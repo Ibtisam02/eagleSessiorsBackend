@@ -13,7 +13,8 @@ router.route("/admin/product/new").post(verifyJWT,authorizeRole("admin"),upload.
     { name: 'images2', maxCount: 1 }, // SKU images
     { name: 'files', maxCount: 10 }, // SKU images
 ]) ,createProduct)
-router.route("/admin/product/:id").put(verifyJWT,authorizeRole("admin"),upload.array("images",10),updateAProduct).delete(verifyJWT,authorizeRole("admin"),deleteAProduct)
+router.route("/admin/product/:id").delete(verifyJWT,authorizeRole("admin"),deleteAProduct)
+router.route("/admin/product/update/:id").put(verifyJWT,authorizeRole("admin"),updateAProduct)
 router.route("/product/:id").get(getAProduct)
 router.route("/sku").get(getSingleSku)
 router.route("/review").put(verifyJWT,addAReview)

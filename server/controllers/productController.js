@@ -152,17 +152,61 @@ const getProductsForHomePage = asyncHandler(async (req, res) => {
 
 const updateAProduct = asyncHandler(async (req, res, next) => {
   try {
-    let sizes = JSON.parse(req.body.sizes);
-    let colors = JSON.parse(req.body.colors);
-    let rmSizes = JSON.parse(req.body.rmSizes);
-    let rmColors = JSON.parse(req.body.rmColors);
-
-    const product = await Product.findById(req.params.id);
-    if (!product) {
-      return next(new ErrorHandler("Product Not Fund", 404));
+    
+    let skus = req.body.skus;
+    let basicDetails = req.body.basicDetails;
+    
+    let toUpdate = skus.map((item) => {
+      return {
+        price: item.price,
+        stock: item.stock,
+        _id: item._id
+      };
+    });
+    
+    console.log(toUpdate);
+    console.log(basicDetails);
+    
+    await Product.findByIdAndUpdate(req.params.id, {
+      name: basicDetails.name,
+      brand: basicDetails.brand,
+      discount: Number(basicDetails.discount),
+      catagory: basicDetails.category,
+      basePrice: Number(basicDetails.basePrice),
+      description: basicDetails.description,
+      shippingFee: Number(basicDetails.shippingFee)
+    });
+    
+    for (let ids of toUpdate) {
+      // Fetch the product
+      const product = await Sku.findById(ids._id);
+      if (product) {
+        // Update price and stock
+        product.price = ids.price;
+        product.stock = Number(ids.stock);
+        await product.save();
+      }
     }
+    
+    // Calculate priceAfterDiscount and update in one go
+    await Sku.updateMany(
+      { productId: req.params.id },
+      [{
+        $set: {
+          priceAfterDiscount: { $toDouble: { $subtract: ['$price', { $multiply: ['$price', { $divide: [Number(basicDetails.discount), 100] }] }] } }
+        }
+      }]
+    );
+    
+    return res.status(200).json({
+      success: true,
+      message: "Updated!"
+    });
+    
+    //console.log(name,description,category,discount,brand,shippingFee,basePrice);
+    
 
-    const imageData = await Promise.all(
+    /*const imageData = await Promise.all(
       req.files.map((file) =>
         cloudinary.uploader.upload(file.path, { folder: "uploads" })
       )
@@ -217,6 +261,7 @@ const updateAProduct = asyncHandler(async (req, res, next) => {
       success: true,
       updatedProduct,
     });
+    */
   } catch (error) {
     return next(error);
   }
@@ -436,5 +481,5 @@ export {
   getAllProductsWithLowStockLength,
   getProductsForHomePage,
   getSingleSku,
-  getSkus
+  getSkus,
 };

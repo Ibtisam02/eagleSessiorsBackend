@@ -18,7 +18,7 @@ const productScheema = new mongoose.Schema({
   },
   shippingFee: {
     type: Number,
-    required: [true, "Please Enter Product Price"],
+    required: [true, "Please Enter Shipping Price"],
     min:[0,"cnnot be less then zero"]
   },
   brand: {
@@ -26,6 +26,7 @@ const productScheema = new mongoose.Schema({
   },
   discount: {
     type: Number,
+    default:0,
     maxLength: [3, "Price cannot exceed 8 characters"],
     min:[0,"discount Cannot be less then 0%"],
     max:[100,"discount Cannot be more then 100%"],

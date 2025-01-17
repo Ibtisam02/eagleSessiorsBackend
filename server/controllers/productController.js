@@ -158,7 +158,7 @@ const updateAProduct = asyncHandler(async (req, res, next) => {
     
     let toUpdate = skus.map((item) => {
       return {
-        price: item.price,
+        price: Number(item.price),
         stock: item.stock,
         _id: item._id
       };
@@ -170,9 +170,9 @@ const updateAProduct = asyncHandler(async (req, res, next) => {
     await Product.findByIdAndUpdate(req.params.id, {
       name: basicDetails.name,
       brand: basicDetails.brand,
-      discount: Number(basicDetails.discount),
+      discount: Number(basicDetails.discount)||0,
       catagory: basicDetails.category,
-      basePrice: Number(basicDetails.basePrice),
+      basePprice: Number(basicDetails.basePrice),
       description: basicDetails.description,
       shippingFee: Number(basicDetails.shippingFee)
     });
@@ -182,18 +182,20 @@ const updateAProduct = asyncHandler(async (req, res, next) => {
       const product = await Sku.findById(ids._id);
       if (product) {
         // Update price and stock
+        product.priceAfterDiscount=ids.price;
         product.price = ids.price;
         product.stock = Number(ids.stock);
         await product.save();
       }
     }
+    console.log("work");
     
     // Calculate priceAfterDiscount and update in one go
     await Sku.updateMany(
       { productId: req.params.id },
       [{
         $set: {
-          priceAfterDiscount: { $toDouble: { $subtract: ['$price', { $multiply: ['$price', { $divide: [Number(basicDetails.discount), 100] }] }] } }
+          priceAfterDiscount: { $toDouble: { $subtract: ['$price', { $multiply: ['$price', { $divide: [Number(basicDetails.discount)||0, 100] }] }] } }
         }
       }]
     );

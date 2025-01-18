@@ -98,7 +98,7 @@ const orderScheema = new mongoose.Schema({
     method:{
       type: String,
       required: true,
-      enum: ['cod', 'card','bank','paypal'],
+      enum: ['cod', 'card','paypal','stripe'],
     }
   },
 

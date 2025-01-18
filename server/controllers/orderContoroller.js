@@ -351,6 +351,19 @@ const webhook = asyncHandler(async (req, res, next) => {
           const paymentIntentId = session.payment_intent;
           console.log('Payment Intent ID:', paymentIntentId);
 
+          let order=await TempOrder.findById(sessionMetadata.id).select('-orderItems._id -_id -paymentInfo').lean();
+          console.log(order);
+          let paymenInfo={
+            status:"paid",
+            method:"stripe"
+          }
+          let createdOrde=await Order.create({...order,paymentInfo:paymenInfo})
+          console.log("this is created order",createdOrde);
+          await sendEmail({
+            email: "ibtisamwarraich101@gmail.com",
+            subject: "Eagle Scissors New Order Email",
+            message: `Congratulations! You have recived a new Order id ${createdOrde._id} from user ${shippingInfo.firstName} ${shippingInfo.lastName} \nEmail:   ${shippingInfo.email}\nPhone:   ${shippingInfo.phone}\nAddress:   ${shippingInfo.address}`,
+          });
           break;
       // Add more cases for other event types you want to handle
       default:
@@ -456,6 +469,7 @@ const changeOrderStatus = asyncHandler(async (req, res, next) => {
     await Order.findByIdAndUpdate(req.body.id, {
       orderStatus: "deliverd",
       $set: { "paymentInfo.status": "paid" },
+      deliveredAt:Date.now()
     });
     status = "deliverd";
   }

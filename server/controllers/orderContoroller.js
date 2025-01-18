@@ -321,6 +321,7 @@ let stripePaymentCard = asyncHandler(async (req, res, next) => {
 });
 
 const webhook = asyncHandler(async (req, res, next) => {
+  console.log(req.body);
   
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   

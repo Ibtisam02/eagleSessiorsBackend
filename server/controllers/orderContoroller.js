@@ -330,7 +330,6 @@ const webhook = asyncHandler(async (req, res, next) => {
   console.log(endpointSecret);
   
   const sig = req.headers['stripe-signature'];
-
   let event;
 
   try {

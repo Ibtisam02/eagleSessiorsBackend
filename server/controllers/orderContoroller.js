@@ -359,14 +359,13 @@ const webhook = asyncHandler(async (req, res, next) => {
           }
           let createdOrde=await Order.create({...order,paymentInfo:paymenInfo})
           console.log("this is created order",createdOrde);
-          await sendEmail({
-            email: "ibtisamwarraich101@gmail.com",
-            subject: "Eagle Scissors New Order Email",
-            message: `Congratulations! You have recived a new Order id ${createdOrde._id} from user ${shippingInfo.firstName} ${shippingInfo.lastName} \nEmail:   ${shippingInfo.email}\nPhone:   ${shippingInfo.phone}\nAddress:   ${shippingInfo.address}`,
-          });
+          await TempOrder.findByIdAndDelete(sessionMetadata.id);
           break;
       // Add more cases for other event types you want to handle
       default:
+        const sessio = event.data.object;
+        let id = sessio.metadata;
+        await TempOrder.deleteOne(id.id);
           console.log(`Unhandled event type ${event.type}`);
   }
 

@@ -365,7 +365,7 @@ const webhook = asyncHandler(async (req, res, next) => {
       default:
         const sessio = event.data.object;
         let id = sessio.metadata;
-        await TempOrder.deleteOne(id.id);
+        await TempOrder.findByIdAndDelete(id.id);
           console.log(`Unhandled event type ${event.type}`);
   }
 

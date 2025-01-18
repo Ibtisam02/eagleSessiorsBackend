@@ -321,10 +321,15 @@ let stripePaymentCard = asyncHandler(async (req, res, next) => {
 });
 
 const webhook = asyncHandler(async (req, res, next) => {
+  console.log("hello");
+  
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  console.log(stripe);
+  
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET; // Set your endpoint secret
-
-  const sig = req.headers['stripe-signature'];
+  console.log(endpointSecret);
+  
+  //const sig = req.headers['stripe-signature'];
 
   let event;
 

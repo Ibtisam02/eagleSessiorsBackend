@@ -34,6 +34,9 @@ app.use("/api/v1", userRoutes);
 app.use("/api/v1", productRoutes);
 app.use("/api/v1", orderRoutes);
 app.use("/api/v1", reviewRoutes);
+app.get("/api/v1/config/paypal",(req,res)=>{
+  res.send(process.env.PAYPAL_CLINET_ID)
+})
 //error midlerware
 app.use(errorMiddleware);
 export { app };

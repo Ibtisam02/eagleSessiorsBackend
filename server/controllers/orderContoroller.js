@@ -528,8 +528,8 @@ const paypalPayments = asyncHandler(async (req, res, next) => {
       payment_method: "paypal",
     },
     redirect_urls: {
-      return_url: `http://localhost:4000/api/v1/success?orderId=${createdOrde._id}`, // Use env for base URL
-      cancel_url: `http://localhost:4000/api/v1/failed`,
+      return_url: `https://eaglesessiorsbackend-production.up.railway.app/api/v1/success?orderId=${createdOrde._id}`, // Use env for base URL
+      cancel_url: `https://eaglesessiorsbackend-production.up.railway.app/api/v1/failed`,
     },
     transactions: [
       {
@@ -600,15 +600,15 @@ const successPaypal = asyncHandler(async (req, res, next) => {
       await TempOrder.findByIdAndDelete(req.query.orderId);
     }
     // Redirect to success page
-    res.redirect(`http://localhost:5173/success`);
+    res.redirect(`${process.env.FRONT_URL_PRODUCTION}/success`);
   } catch (error) {
     console.error(error);
-    res.redirect(`http://localhost:5173/cancel`);
+    res.redirect(`${process.env.FRONT_URL_PRODUCTION}/cancel`);
   }
 });
 
 const failedPaypal = asyncHandler(async (req, res, next) => {
-  res.redirect(`http://localhost:5173/cancel`);
+  res.redirect(`${process.env.FRONT_URL_PRODUCTION}cancel`);
 });
 const getAllOrders = asyncHandler(async (req, res, next) => {
   let orders = await Order.find().sort({ createdAt: -1 });

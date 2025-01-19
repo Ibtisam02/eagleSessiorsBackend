@@ -11,7 +11,7 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: "./.env" });
 paypal.configure({
-  mode: "sandbox",
+  mode: "live",
   client_id: process.env.PAYPAL_CLINET_ID,
   client_secret: process.env.PAYPAL_SECRET,
 });
@@ -145,11 +145,7 @@ const newOdrer = asyncHandler(async (req, res, next) => {
       new ErrorHandler("Internal server Error Somthing went wrong", 500)
     );
   }
-  await sendEmail({
-    email: "ibtisamwarraich101@gmail.com",
-    subject: "Eagle Scissors New Order Email",
-    message: `Congratulations! You have recived a new Order from user ${shippingInfo.firstName} ${shippingInfo.lastName} \nEmail:   ${shippingInfo.email}\nPhone:   ${shippingInfo.phone}\nAddress:   ${shippingInfo.address}`,
-  });
+  
 
   console.log(createdOrde);
 
@@ -306,7 +302,7 @@ let stripePaymentCard = asyncHandler(async (req, res, next) => {
   });
   //const customer = await stripe.customers.create();
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card","paypal"], // Add as many as supported
+    payment_method_types: ["card"], // Add as many as supported
     line_items: line_items,
     /*payment_method_options: {
       customer_balance: {
@@ -608,7 +604,7 @@ const successPaypal = asyncHandler(async (req, res, next) => {
 });
 
 const failedPaypal = asyncHandler(async (req, res, next) => {
-  res.redirect(`${process.env.FRONT_URL_PRODUCTION}cancel`);
+  res.redirect(`${process.env.FRONT_URL_PRODUCTION}/cancel`);
 });
 const getAllOrders = asyncHandler(async (req, res, next) => {
   let orders = await Order.find().sort({ createdAt: -1 });

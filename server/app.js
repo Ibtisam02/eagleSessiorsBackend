@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [process.env.FRONT_URL_PRODUCTION,"https://www.thebarberscissors.com"],
+    origin: [process.env.FRONT_URL_PRODUCTION,process.env.FRONT_URL_PRODUCTION_ONE],
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
